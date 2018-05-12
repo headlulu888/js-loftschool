@@ -6,7 +6,8 @@
  Функция должна добавлять обработчик fn события eventName к элементу target
 
  Пример:
-   addListener('click', document.querySelector('a'), () => console.log('...')) // должна добавить указанный обработчик кликов на указанный элемент
+   addListener('click', document.querySelector('a'), () => console.log('...'))
+   // должна добавить указанный обработчик кликов на указанный элемент
  */
 function addListener(eventName, target, fn) {
     target.addEventListener(eventName, fn);
@@ -52,6 +53,8 @@ function emulateClick(target) {
     const click = new Event('click');
 
     target.dispatchEvent(click);
+
+    // target.click();
 }
 
 /*
@@ -67,7 +70,7 @@ function emulateClick(target) {
  */
 function delegate(target, fn) {
     target.addEventListener('click', event => {
-        (event.target.tagName === 'BUTTON') ? fn() : "";
+        (event.target.tagName === 'BUTTON') ? fn() : '';
     });
 }
 
