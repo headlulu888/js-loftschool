@@ -70,7 +70,8 @@ function emulateClick(target) {
  */
 function delegate(target, fn) {
     target.addEventListener('click', event => {
-        (event.target.tagName === 'BUTTON') ? fn() : '';
+        // (event.target.tagName === 'BUTTON') ? fn() : '';
+        (event.target.tagName === 'BUTTON') && fn();
     });
 }
 
@@ -87,11 +88,14 @@ function delegate(target, fn) {
    который вызовется только один раз и затем удалится
  */
 function once(target, fn) {
-    const obj = {
-        once: true
-    };
+    // target.addEventListener('click', fn, {once: true});
 
-    target.addEventListener('click', fn, obj);
+    function deleteEvent() {
+        fn();
+        this.removeEventListener('click', deleteEvent)
+    }
+
+    target.addEventListener('click', deleteEvent);
 }
 
 export {
