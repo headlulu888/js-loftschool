@@ -102,8 +102,36 @@ reloadButton.addEventListener('click', () => {
 
 homeworkContainer.appendChild(reloadButton);
 
-filterInput.addEventListener('keyup', function() {
+filterInput.addEventListener('keyup', function (evt) {
     // это обработчик нажатия кливиш в текстовом поле
+    while (filterResult.hasChildNodes()) {
+        filterResult.removeChild(filterResult.firstChild);
+    }
+
+    if (evt.target.value) {
+        loadTowns()
+            .then(
+                (response) => {
+                    loadingBlock.textContent = '';
+                    reloadButton.style.display = 'none';
+                    filterBlock.style.display = 'block';
+                    response.forEach(item => {
+                        const fragment = document.createDocumentFragment();
+
+                        if (isMatching(item.name, evt.target.value)) {
+                            const div = document.createElement('div');
+
+                            div.textContent = item.name;
+
+                            fragment.appendChild(div);
+                        }
+
+                        filterResult.appendChild(fragment);
+                    });
+                }
+            )
+    }
+
 });
 
 export {
