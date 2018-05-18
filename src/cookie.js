@@ -43,7 +43,7 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
-const addCookies = () => {
+const addCookies = (name, value) => {
     document.cookie = `${name}=${value}`;
 };
 
@@ -53,6 +53,8 @@ const getCookies = () => {
     if (document.cookie) {
         document.cookie.split(';').map(item => {
             const [name, value] = item.split('=');
+
+            cookies[name.trim()] = value;
         });
 
         return cookies;
