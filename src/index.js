@@ -10,9 +10,11 @@
  */
 function delayPromise(seconds) {
     return new Promise(resolved => {
-        setTimeout(() => {
-            resolved();
-        }, seconds * 1000);
+        // setTimeout(() => {
+        //     resolved();
+        // }, seconds * 1000);
+        // или
+        setTimeout(resolved, seconds * 1000);
     });
 }
 
@@ -30,34 +32,24 @@ function delayPromise(seconds) {
    loadAndSortTowns().then(towns => console.log(towns)) // должна вывести в консоль отсортированный массив городов
  */
 function loadAndSortTowns() {
-    // const url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
+    const url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
 
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-
-        xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
-        // xhr.send();
-        xhr.addEventListener('load', () => {
-            if (xhr.status === 200) {
-                let res = JSON.parse(xhr.responseText);
-
-                resolve(res.sort((a, b) => {
-                    if (a.name > b.name) {
-                        return 1;
-                    }
-
-                    if (a.name < b.name) {
-                        return -1;
-                    }
-
-                    return 0;
-                }));
-            } else {
-                reject();
-            }
+    return fetch(url)
+        .then(handleErrors)
+        .then(response => response.json())
+        .then(cities => {
+            return cities.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            });
         });
-        xhr.send();
-    });
+}
+
+function handleErrors(response) {
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    
+    return response;
 }
 
 export {

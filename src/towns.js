@@ -80,7 +80,9 @@ function loadTowns() {
    isMatching('Moscow', 'Moscov') // false
  */
 function isMatching(full, chunk) {
-    return full.toLowerCase().indexOf(chunk.toLowerCase()) !== -1;
+    // return full.toLowerCase().indexOf(chunk.toLowerCase()) !== -1;
+    // или
+    return !!~full.toLowerCase().indexOf(chunk.toLowerCase());
 }
 
 /* Блок с надписью "Загрузка" */
@@ -105,19 +107,20 @@ homeworkContainer.appendChild(reloadButton);
 filterInput.addEventListener('keyup', function (evt) {
     // это обработчик нажатия кливиш в текстовом поле
     while (filterResult.hasChildNodes()) {
-        filterResult.removeChild(filterResult.firstChild);
+        // filterResult.removeChild(filterResult.firstChild);
+        // или
+        filterResult.innerHTML = '';
     }
 
     if (evt.target.value) {
         loadTowns()
             .then(
                 (response) => {
-                    loadingBlock.textContent = '';
-                    reloadButton.style.display = 'none';
-                    filterBlock.style.display = 'block';
-                    response.forEach(item => {
-                        const fragment = document.createDocumentFragment();
+                    createElem();
+                    
+                    const fragment = document.createDocumentFragment();
 
+                    response.forEach(item => {
                         if (isMatching(item.name, evt.target.value)) {
                             const div = document.createElement('div');
 
@@ -131,8 +134,13 @@ filterInput.addEventListener('keyup', function (evt) {
                 }
             )
     }
-
 });
+
+function createElem() {
+    loadingBlock.textContent = '';
+    reloadButton.style.display = 'none';
+    filterBlock.style.display = 'block';
+}
 
 export {
     loadTowns,
