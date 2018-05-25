@@ -63,6 +63,16 @@ const getCookies = () => {
     return undefined;
 };
 
+// const getCookies = () => {
+//     return document.cookie.split('; ').reduce((prev, curr) => {
+//         const [name, value] = curr.split('=');
+
+//         prev[name] = value;
+
+//         return prev;
+//     }, {});
+// };
+
 const updateTable = filter => {
     let cookies = getCookies();
 
@@ -75,18 +85,22 @@ const updateTable = filter => {
             let row = listTable.insertRow(-1);
             let button = document.createElement('button');
 
-            button.textContent = 'Удалить';
-            button.addEventListener('click', () => {
-                document.cookie = `${cookie}=; expires=${new Date(0)}`;
-                updateTable();
-            });
-
-            row.insertCell(0).textContent = cookie;
-            row.insertCell(1).textContent = cookies[cookie];
-            row.insertCell(2).appendChild(button);
+            delButton(row, button, cookie, cookies);  
         }
     }
 };
+
+function delButton(row, button, cookie, cookies) {
+    button.textContent = 'Удалить';
+    button.addEventListener('click', () => {
+        document.cookie = `${cookie}=; expires=${new Date(0)}`;
+        updateTable();
+    });
+
+    row.insertCell(0).textContent = cookie;
+    row.insertCell(1).textContent = cookies[cookie];
+    row.insertCell(2).appendChild(button);
+}
 
 filterNameInput.addEventListener('keyup', function() {
     // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
